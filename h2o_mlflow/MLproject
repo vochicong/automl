@@ -1,0 +1,8 @@
+name: automl
+conda_env: conda.yml
+
+entry_points:
+    train_h2o:
+        command: "cd ..; python -c 'from h2o_mlflow.train_h2o import train_h2o; train_h2o()'"
+    test:
+        command: "pytest ../common/test.py"

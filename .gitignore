@@ -1,8 +1,11 @@
+**/*.env
 **/data/*
 **/mlruns
+**/models
+**/tmp
 **/.DS_Store
+**/.cache
 **/*-checkpoint.ipynb
 **/*.pyc
-tmp/*
-.vscode/settings.json
-models/*
+.vscode/*
+.azureml/*

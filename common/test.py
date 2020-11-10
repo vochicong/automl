@@ -4,15 +4,13 @@ import warnings
 warnings.simplefilter("ignore", category=DeprecationWarning)
 warnings.simplefilter("ignore", category=RuntimeWarning)
 
-import h2o
-import joblib
 import mlflow.pyfunc
 import numpy as np
 import pandas as pd
 import requests
-from h2o.frame import H2OFrame
 from loguru import logger
-from automl.config import TEST_CSV
+
+from common.config import TEST_CSV
 
 
 def read_dftest():
@@ -30,13 +28,12 @@ def reload_mlflow_predict(dftest):
 
 
 def test_api():
+    scoring_uri = os.getenv("SCORING_URI", "http://127.0.0.1:5000/invocations")
     dftest = read_dftest()
 
     data = dftest.to_json(orient="split", index=False)
     res = requests.post(
-        "http://127.0.0.1:5000/invocations",
-        data=data,
-        headers={"Content-type": "application/json"},
+        scoring_uri, data=data, headers={"Content-type": "application/json"},
     )
 
     preds = pd.DataFrame(

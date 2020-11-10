@@ -1,32 +1,32 @@
+include .env
+export
+
 SHELL := /bin/bash
-SRC = automl/*.py
-DATA = data/processed/train.csv test/data/dftest.csv
-MLFLOW_RUN = mlflow run . --no-conda
+SRC = */*.py
+DATA = data/processed/train.csv data/test/dftest.csv
+PREP_MODEL = models/prep.model
+MLFLOW_RUN = mlflow run
 
 all: train serve
 train: train_autogluon
 tmp/run_env.sh: $(SRC) $(DATA)
 	$(MAKE) train
-train_h2o: $(SRC) $(DATA)
-	$(MLFLOW_RUN) -e train_h2o
 
-train_autogluon: $(SRC) $(DATA)
-	$(MLFLOW_RUN) -e train_autogluon
+train_h2o: $(SRC) $(DATA) $(PREP_MODEL)
+	$(MLFLOW_RUN) h2o_mlflow -e train_h2o
 
-data/processed/train.csv test/data/dftest.csv: automl/preprocess.py
-	$(MLFLOW_RUN) -e preprocess
+train_autogluon: $(SRC) $(DATA) $(PREP_MODEL)
+	$(MLFLOW_RUN) autogluon_mlflow -e train_autogluon
 
-serve: tmp/run_env.sh
-	. tmp/run_env.sh && scripts/mlflow_serve.sh
-
-.PHONY: test
-test:
-	. tmp/run_env.sh && pytest test/test.py
+preproc $(DATA) $(PREP_MODEL): common/preprocess.py
+	$(MLFLOW_RUN) common -e preprocess
 
 devenv: conda*.yml
+	for e in */conda.yml; do conda env update -f $$e; done
 	conda env update -f conda-dev.yml
-	conda env update -f conda.yml
-	python --version && java -version
+	python --version
+	gcc --version
+	java -version
 
 cleancode:
 	bash scripts/clean_code.sh

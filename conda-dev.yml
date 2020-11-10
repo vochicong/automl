@@ -2,7 +2,6 @@ channels:
   - defaults
   - auto
 dependencies:
-  - python=3.7
   - ipykernel
   - black
   - flake8
@@ -12,3 +11,5 @@ dependencies:
   - pip
   - pip:
     - autoflake
+    - azureml-sdk
+    - python-dotenv

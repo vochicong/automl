@@ -1,0 +1,7 @@
+
+AzureML:
+  ✔ Pin pip=20.1.1 due to issue of azureml and ruamel @done(20-11-05 10:36)
+  ✔ Pin Python=3.6.10 to match AzureML Python version @done(20-11-09 18:41)
+  ☐ Migrate to using [Environments](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-use-environments)
+    ☐ Use custom Dockerfile for deployment
+

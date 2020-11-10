@@ -1,4 +1,6 @@
-FROM continuumio/miniconda3
+FROM ubuntu:18.04
+# FROM continuumio/miniconda3
+# FROM mcr.microsoft.com/azureml/o16n-base/python-slim:latest.japaneast
 
 # Options for common setup script
 ARG INSTALL_ZSH="true"

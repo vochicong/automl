@@ -1,0 +1,8 @@
+name: automl
+conda_env: conda.yml
+
+entry_points:
+    train_autogluon:
+        command: "cd ..; python -c 'from autogluon_mlflow.train_autogluon import train_autogluon; train_autogluon()'"
+    test:
+        command: "pytest ../common/test.py"

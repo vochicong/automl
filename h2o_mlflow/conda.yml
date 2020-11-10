@@ -2,20 +2,16 @@ channels:
   - defaults
   - anaconda
   - conda-forge
-  # - h2oai
 dependencies:
-  - python=3.7
-  - bokeh
-  # - h2o=3.30.0.4
+  - python=3.6.10 # match AzureML base image
   - joblib
   - loguru
   - openjdk
-  - mlflow
+  - mlflow=1.11.0
   - pandas
   - scikit-learn
-  - pip
+  - python-dotenv
+  - pytest
+  - pip=20.1.1
   - pip:
       - h2o
-      # - mxnet_cu101<2.0.0
-      - mxnet<2.0.0
-      - autogluon.tabular

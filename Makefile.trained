@@ -1,0 +1,33 @@
+# -*- mode: makefile -*-
+
+include .env
+export
+include .trained.env
+export
+
+SHELL := /bin/bash
+DOCKER_NAME=automl
+
+list_artifacts:
+	tree $(MLFLOW_MODEL)
+
+serve:
+	mlflow models serve -m $(MLFLOW_MODEL)
+
+.PHONY: test
+test:
+	# pytest test/test.py
+	mlflow run autogluon_mlflow -e test
+	# mlflow run h2o_mlflow -e test
+
+build_docker:
+	mlflow models build-docker -m $(MLFLOW_MODEL) -n $(DOCKER_NAME) --install-mlflow
+
+serve_docker:
+	docker run -p 5000:8000 -e DISABLE_NGINX=true -e GUNICORN_CMD_ARGS='--bind=0.0.0.0 --workers=1' $(DOCKER_NAME)
+
+azureml_deploy:
+	mlflow run autogluon_mlflow -e ../common/azureml_deploy.py
+
+test_azureml_deploy:
+	set -a; source .deployed.env && mlflow run autogluon_mlflow -e test

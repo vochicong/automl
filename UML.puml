@@ -1,18 +1,32 @@
 @startuml
+autonumber
 skinparam defaultFontName Osaka
 ' scale 2
 ' left to right direction
 ' title mlflowを使った学習・予測
-actor "AI開発者" as trainer
-actor "APIユーザ" as user
-trainer -> "MLflow tracking" as mlflow: 実験を開始
-mlflow <-> "MLflow serving" as serving: Artifacts連携
-trainer -> preprocess: 学習・テストデータ前処理
-trainer -> model: MLモデル学習 (fit)
-trainer -> mlflow: 前処理モデル+MLモデルを保存
-trainer -> serving: 保存したモデルを指定して予測REST APIサービスを開始
-user -> serving: 予測対象データJSON
-serving -> preprocess: データ前処理
-serving -> model: 予測
-serving -> user: 予測結果JSON
+actor "AI trainer" as trainer
+actor "API user" as user
+box "Local Dev"
+participant preprocess
+participant "ML model" as model
+end box
+box "MLflow" #LightGreen
+participant "Tracking metrics/Logging artifacts" as mlflow
+end box
+box "AzureML" #LightBlue
+participant "Models" as builder
+participant "Endpoints" as serving
+end box
+' trainer -> mlflow: Start experiment
+trainer -> preprocess: Preprocess train/test data
+trainer -> model: Fit the ML model
+trainer -> mlflow: Log preproc and ML models
+trainer -> mlflow: mlflow.azureml.build_image of MLflow model
+mlflow -> builder: MLflow model
+trainer -> serving: Deploy AciWebservice (REST API) from Docker image
+serving -> builder: Get image
+user -> serving: Prediction data JSON
+' serving -> preprocess: Preprocess prediction data
+' serving -> model: Predict
+' serving -> user: Prediction result JSON
 @enduml

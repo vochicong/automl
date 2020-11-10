@@ -1,0 +1,6 @@
+name: automl
+conda_env: conda.yml
+
+entry_points:
+    preprocess:
+        command: "cd ..; python -c 'from common.preprocess import preprocess; preprocess()'"

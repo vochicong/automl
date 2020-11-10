@@ -4,7 +4,7 @@
 	"name": "AutoML",
 	"context": "..",
 	"dockerFile": "Dockerfile",
-	// Add the IDs of extensions you want installed when the container is created.
+	"workspaceFolder": "/workspaces/automl",
 	"extensions": [
 		"ms-azuretools.vscode-docker",
 		// "ms-python.python",
